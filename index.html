@@ -630,7 +630,8 @@
       <div style="width:56px; height:56px; margin:0 auto 12px; background:rgba(236, 72, 153, 0.15); border:1px solid rgba(236, 72, 153, 0.3); border-radius:16px; display:grid; place-items:center; font-size:26px; box-shadow:0 0 20px rgba(236, 72, 153, 0.3);">🔞</div>
       <h3 style="color:#ffffff; margin:0 0 8px 0; font-size:18px; font-weight:700;">ورود به بخش بزرگسالان</h3>
       <p style="color:#94a3b8; font-size:12.5px; margin:0 0 18px 0; line-height:1.6;">این بخش دارای محتوای رده سنی +18 است.<br>جهت ورود رمز امنیتی اختصاصی را وارد کنید.</p>
-      <input type="password" id="pwd-input" placeholder="رمز عبور..." style="width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(10,14,24,0.7); color:#fff; font-size:16px; text-align:center; margin-bottom:18px; box-sizing:border-box; outline:none; transition:all 0.2s;" onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 15px rgba(236,72,153,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.boxShadow='none';">
+      <input type="password" id="pwd-input" placeholder="رمز عبور..." style="width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(10,14,24,0.7); color:#fff; font-size:16px; text-align:center; margin-bottom:8px; box-sizing:border-box; outline:none; transition:all 0.2s;" onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 15px rgba(236,72,153,0.3)';" onblur="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.boxShadow='none';">
+      <div id="pwd-error-msg" style="display:none; color:#f87171; font-size:12px; margin-bottom:12px; font-weight:500;">❌ رمز عبور اشتباه است!</div>
       <div style="display:flex; gap:10px;">
         <button id="pwd-submit" style="flex:1; padding:12px; background:var(--accent-grad-hot); color:#fff; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 4px 15px rgba(236,72,153,0.35); transition:transform 0.1s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">تایید و ورود</button>
         <button id="pwd-cancel" style="flex:1; padding:12px; background:rgba(255,255,255,0.06); color:#94a3b8; border:1px solid rgba(255,255,255,0.1); border-radius:12px; font-weight:500; font-size:14px; cursor:pointer; transition:background 0.2s;">انصراف</button>
@@ -1121,22 +1122,30 @@
     const pwdInput = document.getElementById('pwd-input');
     const pwdSubmit = document.getElementById('pwd-submit');
     const pwdCancel = document.getElementById('pwd-cancel');
+    const pwdErrorMsg = document.getElementById('pwd-error-msg');
+
+    pwdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') pwdSubmit.click();
+    });
 
     pwdSubmit.addEventListener('click', () => {
       const val = pwdInput.value.trim();
-      if (val.toLowerCase() === 'arianf3' || val === '18' || val === '1818') {
+      if (val.toLowerCase() === 'arianf3') {
         adultUnlocked = true;
+        pwdErrorMsg.style.display = 'none';
         pwdModal.style.display = 'none';
         showToast('قفل بخش بزرگسالان باز شد');
         loadFromUrl(ADULT_URL);
       } else {
-        alert('رمز عبور نادرست است!');
+        pwdErrorMsg.style.display = 'block';
+        pwdInput.style.borderColor = '#f87171';
         pwdInput.value = '';
         pwdInput.focus();
       }
     });
 
     pwdCancel.addEventListener('click', () => {
+      pwdErrorMsg.style.display = 'none';
       pwdModal.style.display = 'none';
       sourceSelector.value = 'playlist.m3u';
       loadFromUrl('playlist.m3u');
