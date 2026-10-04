@@ -59,6 +59,88 @@
       flex-direction: column;
     }
 
+    /* Category Navigation Pills Bar */
+    .category-bar-wrapper {
+      background: rgba(10, 14, 24, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 8px 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      z-index: 40;
+    }
+    .category-bar-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+    .category-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: max-content;
+    }
+    .cat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+    .cat-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+    .cat-pill.active {
+      background: var(--accent-grad);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 3px 14px var(--accent-glow);
+    }
+    .cat-pill.adult-pill.active {
+      background: var(--accent-grad-hot);
+      box-shadow: 0 3px 14px rgba(236, 72, 153, 0.4);
+    }
+
+    /* Live Badge in Stream Overlay */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #ef4444;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .live-pulse {
+      width: 6px;
+      height: 6px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: pulse-live 1.5s infinite;
+    }
+    @keyframes pulse-live {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
     /* Header */
     header {
       background: rgba(15, 23, 42, 0.9);
@@ -107,7 +189,39 @@
     .header-controls {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+    }
+
+    .btn-header-glass {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--text-muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-header-glass:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      border-color: var(--glass-border-hover);
+      transform: scale(1.05);
+    }
+
+    .btn-header-glass:active {
+      transform: scale(0.95);
+    }
+
+    .btn-header-glass svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
     }
 
     .btn {
@@ -184,6 +298,12 @@
       height: 100%;
       object-fit: contain;
       background: #000;
+    }
+
+    video::-webkit-media-controls-timeline,
+    video::-webkit-media-controls-current-time-display,
+    video::-webkit-media-controls-time-remaining-display {
+      display: none !important;
     }
 
     /* Player Overlay (Auto retry & Manual retry) */
@@ -561,10 +681,6 @@
 
     /* Responsive */
     @media (max-width: 850px) {
-      .brand-title {
-        display: none;
-      }
-
       .container {
         flex-direction: column;
         flex: 1;
@@ -574,7 +690,7 @@
       .player-wrapper {
         flex: none;
         width: 100%;
-        height: 220px;
+        height: 230px;
         border-bottom: 2px solid var(--border);
       }
 
@@ -599,21 +715,10 @@
 
     @media (max-width: 420px) {
       .player-wrapper {
-        height: 190px;
+        height: 200px;
       }
-      #source-selector {
-        width: 175px;
-        cursor: pointer;
-      }
-      #source-selector optgroup {
-        background: #1e1e24;
-        color: #90caf9;
-        font-weight: bold;
-      }
-      #source-selector option {
-        background: #16161a;
-        color: #ffffff;
-        font-weight: normal;
+      .brand-title {
+        font-size: 0.9rem;
       }
     }
   </style>
@@ -644,47 +749,77 @@
       <div class="brand-logo">
         <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4z M10 8.5v7l6-3.5z"/></svg>
       </div>
-      <div class="brand-title">تلویزیون دامبل پلیر</div>
+      <div class="brand-title">دامبل تی‌وی</div>
     </div>
+
+    <!-- Hidden native elements kept for code compatibility -->
+    <select id="source-selector" style="display: none;">
+      <option value="playlist.m3u">persian</option>
+      <option value="playlist_hd.m3u">persian_hd</option>
+      <option value="playlist_sd.m3u">persian_sd</option>
+      <option value="https://iptv-org.github.io/iptv/categories/sports.m3u">sports</option>
+      <option value="https://iptv-org.github.io/iptv/categories/movies.m3u">movies</option>
+      <option value="https://iptv-org.github.io/iptv/categories/music.m3u">music</option>
+      <option value="https://iptv-org.github.io/iptv/categories/animation.m3u">animation</option>
+      <option value="https://iptv-org.github.io/iptv/languages/eng.m3u">english</option>
+      <option value="https://iptv-org.github.io/iptv/countries/us.m3u">us</option>
+      <option value="https://iptv-org.github.io/iptv/countries/tr.m3u">tr</option>
+      <option value="adult_xxx">adult</option>
+      <option value="custom">custom</option>
+    </select>
+    <input type="text" id="url-loader" style="display: none;">
+    <button id="btn-load-url" style="display: none;"></button>
+    <input type="file" id="file-loader" style="display: none;">
 
     <div class="header-controls">
-      <select id="source-selector" class="input-field">
-        <optgroup label="شبکه‌های فارسی">
-          <option value="playlist.m3u">فارسی (همه کیفیت‌ها)</option>
-          <option value="playlist_hd.m3u">فارسی (کیفیت HD)</option>
-          <option value="playlist_sd.m3u">فارسی (کیفیت SD)</option>
-        </optgroup>
-        <optgroup label="شبکه‌های خارجی و بین‌المللی">
-          <option value="https://iptv-org.github.io/iptv/languages/eng.m3u">انگلیسی (اخبار، فیلم، مستند)</option>
-          <option value="https://iptv-org.github.io/iptv/categories/sports.m3u">ورزشی جهان (Sports)</option>
-          <option value="https://iptv-org.github.io/iptv/categories/movies.m3u">فیلم و سینما (Movies)</option>
-          <option value="https://iptv-org.github.io/iptv/categories/music.m3u">موزیک ویدیو (Music)</option>
-          <option value="https://iptv-org.github.io/iptv/categories/animation.m3u">کارتون و انیمیشن (Kids)</option>
-          <option value="https://iptv-org.github.io/iptv/categories/news.m3u">اخبار بین‌المللی (News)</option>
-          <option value="https://iptv-org.github.io/iptv/countries/us.m3u">شبکه‌های آمریکا (USA)</option>
-          <option value="https://iptv-org.github.io/iptv/countries/uk.m3u">شبکه‌های انگلیس (UK)</option>
-          <option value="https://iptv-org.github.io/iptv/countries/tr.m3u">شبکه‌های ترکیه (Turkey)</option>
-        </optgroup>
-        <optgroup label="بزرگسالان (+18 قفل شده)">
-          <option value="adult_xxx">🔞 کانال‌های بزرگسالان (+18)</option>
-        </optgroup>
-        <option value="custom">آدرس دلخواه...</option>
-      </select>
-
-      <input type="text" id="url-loader" class="input-field" placeholder="نشانی M3U..." style="display: none; width: 130px;">
-      <button class="btn btn-primary" id="btn-load-url">بارگذاری</button>
-
-      <label class="btn" for="file-loader" title="بارگذاری فایل از گوشی">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
-        فایل
-      </label>
-      <input type="file" id="file-loader" accept=".m3u,.m3u8" style="display: none;">
+      <button class="btn" id="btn-refresh-feed" title="به‌روزرسانی استریم">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        تازه سازی
+      </button>
+      <button class="btn btn-primary" id="btn-fullscreen-toggle" title="تمام صفحه">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        تمام صفحه
+      </button>
     </div>
   </header>
+
+  <!-- Netflix-Style Modern Category Pills -->
+  <nav class="category-bar-wrapper">
+    <div class="category-pills">
+      <div class="cat-pill active" data-source="playlist.m3u">
+        <span>🇮🇷</span> شبکه‌های سراسری ایران
+      </div>
+      <div class="cat-pill" data-source="https://iptv-org.github.io/iptv/categories/sports.m3u">
+        <span>⚽</span> ورزش و فوتبال زنده
+      </div>
+      <div class="cat-pill" data-source="https://iptv-org.github.io/iptv/categories/movies.m3u">
+        <span>🎬</span> فیلم و سریال
+      </div>
+      <div class="cat-pill" data-source="https://iptv-org.github.io/iptv/categories/music.m3u">
+        <span>🎵</span> موزیک و کنسرت
+      </div>
+      <div class="cat-pill" data-source="https://iptv-org.github.io/iptv/languages/eng.m3u">
+        <span>🌍</span> ماهواره و بین‌الملل
+      </div>
+      <div class="cat-pill" data-source="https://iptv-org.github.io/iptv/categories/animation.m3u">
+        <span>🧸</span> انیمیشن و کودک
+      </div>
+      <div class="cat-pill" data-source="https://iptv-org.github.io/iptv/countries/tr.m3u">
+        <span>🇹🇷</span> شبکه‌های ترکیه
+      </div>
+      <div class="cat-pill adult-pill" data-source="adult_xxx">
+        <span>🔞</span> بخش بزرگسالان (+18)
+      </div>
+    </div>
+  </nav>
 
   <div class="container">
     <main class="player-wrapper">
       <div class="stream-overlay">
+        <div class="live-badge">
+          <span class="live-pulse"></span>
+          زنده
+        </div>
         <div id="status-indicator" class="status-dot"></div>
         <span id="now-playing-title">کانالی انتخاب نشده</span>
       </div>
@@ -860,7 +995,10 @@
           const qualityMatch = line.match(/tvg-quality="([^"]*)"/);
 
           const titlePart = line.split(',').slice(1).join(',').trim();
-          const channelName = (nameMatch && nameMatch[1]) || titlePart || 'شبکه بدون نام';
+          let channelName = (nameMatch && nameMatch[1]) || titlePart || 'شبکه بدون نام';
+          // Clean developer/country artifacts from channel names
+          channelName = channelName.replace(/\.(fr|tr|de|us|uk|ir|ru|es|it|ca|in|pk|eu)$/i, '');
+          channelName = channelName.replace(/\|\s*(US|UK|IR|DE|FR|TR|ES)/gi, '').trim();
 
           temp = {
             id: (idMatch && idMatch[1]) || '',
@@ -1144,10 +1282,54 @@
       }
     });
 
+    // Category Pills Controller
+    const catPills = document.querySelectorAll('.cat-pill');
+    catPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        catPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        const src = pill.dataset.source;
+        if (src === 'adult_xxx') {
+          if (!adultUnlocked) {
+            pwdInput.value = '';
+            pwdErrorMsg.style.display = 'none';
+            pwdModal.style.display = 'flex';
+            pwdInput.focus();
+          } else {
+            loadFromUrl(ADULT_URL);
+          }
+        } else {
+          loadFromUrl(src);
+        }
+      });
+    });
+
+    // Refresh & Fullscreen buttons in header
+    document.getElementById('btn-refresh-feed').addEventListener('click', () => {
+      if (currentChannelIdx >= 0) {
+        showToast('در حال بارگذاری مجدد...');
+        playChannel(currentChannelIdx);
+      } else if (currentSourceUrl) {
+        loadFromUrl(currentSourceUrl);
+      }
+    });
+
+    document.getElementById('btn-fullscreen-toggle').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    });
+
     pwdCancel.addEventListener('click', () => {
       pwdErrorMsg.style.display = 'none';
       pwdModal.style.display = 'none';
-      sourceSelector.value = 'playlist.m3u';
+      // Reset active pill to first one
+      catPills.forEach(p => p.classList.remove('active'));
+      catPills[0].classList.add('active');
       loadFromUrl('playlist.m3u');
     });
 
