@@ -734,6 +734,38 @@
 
   <div id="toast" class="toast">پیوند کپی شد!</div>
 
+  <!-- Cyberpunk Spotify Intro Splash Screen -->
+  <div id="intro-splash" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0a0c10; z-index:999999; display:flex; flex-direction:column; justify-content:center; align-items:center; transition:opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s ease;">
+    <div style="display:flex; flex-direction:column; align-items:center; gap:20px; width:85%; max-width:340px;">
+      
+      <!-- Brand Logo Glow -->
+      <div style="width:72px; height:72px; border-radius:24px; background:rgba(30,215,96,0.1); border:1px solid rgba(30,215,96,0.4); display:grid; place-items:center; box-shadow:0 0 35px rgba(30,215,96,0.4); backdrop-filter:blur(10px);">
+        <svg viewBox="0 0 24 24" width="40" height="40" stroke="#1ed760" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <rect x="2" y="7" width="20" height="15" rx="3" fill="rgba(30,215,96,0.15)" />
+          <polyline points="17 2 12 7 7 2" />
+          <polygon points="10 11 15 14.5 10 18" fill="#1ed760" />
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <div style="text-align:center;">
+        <div style="font-size:22px; font-weight:900; color:#ffffff; letter-spacing:0.5px; text-shadow:0 0 20px rgba(30,215,96,0.5);">DUMBLE TV</div>
+        <div style="font-size:12px; color:#b3b3b3; margin-top:4px;">تلویزیون آنلاین دامبل پلیر</div>
+      </div>
+
+      <!-- Minimal Progress Bar Container (matching the video's aesthetic) -->
+      <div style="width:100%; height:32px; border:2px solid #ffffff; border-radius:6px; position:relative; overflow:hidden; background:#000000; box-shadow:0 0 20px rgba(255,255,255,0.15);">
+        <!-- Fill Bar -->
+        <div id="splash-bar" style="width:0%; height:100%; background:#ffffff; transition:width 0.04s linear;"></div>
+        <!-- Centered Percentage Text -->
+        <div id="splash-pct" style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Vazirmatn', sans-serif; font-size:15px; font-weight:900; color:#1ed760; mix-blend-mode:difference; z-index:2;">0%</div>
+      </div>
+
+      <!-- Quick skip button -->
+      <button id="splash-skip" style="background:transparent; border:none; color:#666; font-size:11px; cursor:pointer; padding:6px 12px; border-radius:6px; transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">ورود مستقیم ›</button>
+    </div>
+  </div>
+
   <!-- Custom Password Modal for Telegram WebApp -->
   <div id="pwd-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); z-index:99999; justify-content:center; align-items:center;">
     <div style="background:rgba(20, 26, 42, 0.85); backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); border:1px solid rgba(236, 72, 153, 0.4); border-radius:20px; padding:28px 24px; max-width:320px; width:90%; text-align:center; box-shadow:0 15px 40px rgba(236, 72, 153, 0.25);">
@@ -1395,7 +1427,47 @@
     searchInput.addEventListener('input', renderChannels);
     groupFilter.addEventListener('change', renderChannels);
 
+    // 2-Second Super-Fast Splash Screen Controller
+    function runIntroSplash() {
+      const splash = document.getElementById('intro-splash');
+      const bar = document.getElementById('splash-bar');
+      const pct = document.getElementById('splash-pct');
+      const skipBtn = document.getElementById('splash-skip');
+      if (!splash) return;
+
+      let progress = 0;
+      let closed = false;
+
+      function closeSplash() {
+        if (closed) return;
+        closed = true;
+        splash.style.opacity = '0';
+        splash.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 500);
+      }
+
+      if (skipBtn) skipBtn.onclick = closeSplash;
+
+      // Finish in ~2 seconds (50 intervals of 40ms)
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 3) + 2;
+        if (progress >= 100) {
+          progress = 100;
+          bar.style.width = '100%';
+          pct.textContent = '100%';
+          clearInterval(interval);
+          setTimeout(closeSplash, 200);
+        } else {
+          bar.style.width = progress + '%';
+          pct.textContent = progress + '%';
+        }
+      }, 35);
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      runIntroSplash();
       // Expand Telegram WebApp if opened in Telegram
       if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
