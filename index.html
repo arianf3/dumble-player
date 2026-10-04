@@ -694,7 +694,9 @@
         <div id="auto-retry-container" style="display: none; flex-direction: column; align-items: center; gap: 12px;">
           <div class="spinner"></div>
           <div class="error-msg">
-            در حال تلاش برای اتصال مجدد...
+            در حال دریافت استریم و اتصال...
+            <br>
+            <span style="font-size:11px; color:#94a3b8;">(اگر وصل نشد کانال دیگری انتخاب کنید یا فیلترشکن را بررسی کنید)</span>
             <br>
             (<span id="retry-countdown" class="retry-countdown-num">5</span> ثانیه)
           </div>
@@ -1003,10 +1005,19 @@
       if (Hls.isSupported()) {
         hls = new Hls({ 
           enableWorker: true, 
-          lowLatencyMode: true, 
-          backBufferLength: 60,
-          manifestLoadingMaxRetry: 2,
-          levelLoadingMaxRetry: 2
+          lowLatencyMode: false,
+          backBufferLength: 90,
+          maxBufferLength: 30,
+          manifestLoadingTimeOut: 15000,
+          manifestLoadingMaxRetry: 6,
+          manifestLoadingRetryDelay: 1000,
+          levelLoadingTimeOut: 15000,
+          levelLoadingMaxRetry: 6,
+          fragLoadingTimeOut: 20000,
+          fragLoadingMaxRetry: 6,
+          xhrSetup: function (xhr, url) {
+            xhr.withCredentials = false;
+          }
         });
         
         hls.loadSource(channel.url);
@@ -1016,13 +1027,21 @@
           video.play().catch(() => {});
         });
 
-        // مدیریت خطا: اجرای تلاش چند ثانیه‌ای
+        // مدیریت خطا: ریکاوری پیشرفته HLS
         hls.on(Hls.Events.ERROR, (_, data) => {
           if (data.fatal) {
-            if (!isAutoRetrying) {
-              startAutoRetryCountdown();
-              if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
-              else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                console.log('HLS Network error, trying to recover...');
+                hls.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                console.log('HLS Media error, trying to recover...');
+                hls.recoverMediaError();
+                break;
+              default:
+                if (!isAutoRetrying) startAutoRetryCountdown();
+                break;
             }
           }
         });
