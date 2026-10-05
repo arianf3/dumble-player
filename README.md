@@ -4,7 +4,7 @@
 > **پلتفرم مدرن و نسل جدید پخش آنلاین تلویزیون و IPTV با رابط کاربری شیشه‌ای (Glassmorphic) و تم دارک نئونی اسپاتیفای**  
 > قابل اجرا به صورت مستقیم در مرورگر و ادغام‌شده با **Telegram Mini App** بدون نیاز به نصب نرم‌افزار اضافی.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-1ed760?style=for-the-badge&logo=googlechrome&logoColor=white)](https://arianradshan1-cloud.github.io/dumble-player/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-1ed760?style=for-the-badge&logo=googlechrome&logoColor=white)](https://arianf3.github.io/dumble-player/)
 [![Telegram Bot](https://img.shields.io/badge/Telegram%20Bot-@Riddlemasster__Bot-229ED9?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/Riddlemasster_Bot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
@@ -31,7 +31,7 @@
 
 ### ۱. اجرای آنلاین در وب
 مستقیماً از طریق لینک رسمی GitHub Pages:  
-👉 **[https://arianradshan1-cloud.github.io/dumble-player/](https://arianradshan1-cloud.github.io/dumble-player/)**
+👉 **[https://arianf3.github.io/dumble-player/](https://arianf3.github.io/dumble-player/)**
 
 ### ۲. اجرا در تلگرام با ربات رسمی
 با استارت ربات رسمی تلگرام و کلیک روی دکمه **«📺 پخش آنلاین»**، برنامه مستقیماً داخل تلگرام لود می‌شود:  
@@ -43,7 +43,7 @@
 
 ```bash
 # دریافت سورس کد
-git clone https://github.com/arianradshan1-cloud/dumble-player.git
+git clone https://github.com/arianf3/dumble-player.git
 
 # ورود به پوشه
 cd dumble-player
